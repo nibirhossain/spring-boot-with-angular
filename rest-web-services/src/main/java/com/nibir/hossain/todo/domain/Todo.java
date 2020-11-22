@@ -1,22 +1,29 @@
 package com.nibir.hossain.todo.domain;
 
-import java.time.OffsetDateTime;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Date;
 
 /*
  * Created by Nibir Hossain on 21.11.20
  */
+@Entity
 public class Todo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     private String description;
-    private OffsetDateTime targetDate;
+    private Date targetDate;
     private boolean isDone;
 
     public Todo() {
 
     }
 
-    public Todo(long id, String name, String description, OffsetDateTime targetDate, boolean isDone) {
+    public Todo(long id, String name, String description, Date targetDate, boolean isDone) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,11 +55,11 @@ public class Todo {
         this.description = description;
     }
 
-    public OffsetDateTime getTargetDate() {
+    public Date getTargetDate() {
         return targetDate;
     }
 
-    public void setTargetDate(OffsetDateTime targetDate) {
+    public void setTargetDate(Date targetDate) {
         this.targetDate = targetDate;
     }
 

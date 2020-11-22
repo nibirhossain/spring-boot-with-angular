@@ -4,15 +4,24 @@ package com.nibir.hossain.todo.services;
  * Created by Nibir Hossain on 21.11.20
  */
 
+import com.nibir.hossain.todo.repositories.TodoRepository;
+import com.nibir.hossain.todo.web.mappers.TodoMapper;
 import com.nibir.hossain.todo.web.model.TodoDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TodoServiceImpl implements TodoService {
+
+    @Autowired
+    private TodoRepository todoRepository;
+    @Autowired
+    private TodoMapper todoMapper;
 
     private static List<TodoDto> todoDtoList = new ArrayList<>();
     private static long idCounter = 0;
@@ -24,7 +33,10 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<TodoDto> findAll() {
-        return todoDtoList;
+        return this.todoRepository.findAll()
+                .stream()
+                .map(todoMapper::todo2TodoDto)
+                .collect(Collectors.toList());
     }
 
     @Override

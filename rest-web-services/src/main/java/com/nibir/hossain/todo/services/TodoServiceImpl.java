@@ -4,6 +4,7 @@ package com.nibir.hossain.todo.services;
  * Created by Nibir Hossain on 21.11.20
  */
 
+import com.nibir.hossain.todo.domain.Todo;
 import com.nibir.hossain.todo.repositories.TodoRepository;
 import com.nibir.hossain.todo.web.exceptions.NotFoundException;
 import com.nibir.hossain.todo.web.mappers.TodoMapper;
@@ -39,11 +40,14 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoDto updateById(Long id, TodoDto object) {
-        if(object.getId() == -1 || object.getId() == 0) {
-        } else {
-            deleteById(object.getId());
-        }
-        return object;
+        Todo todo = this.todoRepository.findById(id).orElseThrow(NotFoundException::new);
+        todo.setName(object.getName());
+        todo.setDescription(object.getDescription());
+        todo.setTargetDate(object.getTargetDate());
+        todo.setDone(object.isDone());
+
+        return this.todoMapper.todo2TodoDto(this.todoRepository.save(todo));
+
     }
 
     @Override

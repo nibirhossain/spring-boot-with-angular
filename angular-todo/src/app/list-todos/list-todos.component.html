@@ -1,0 +1,26 @@
+<h1>My ToDo's</h1>
+<div class="alert alert-success" *ngIf='message'>{{ message }}</div>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Target Date</th>
+        <th scope="col">Completed</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let todo of todos">
+        <th scope="row">{{ todo.id }}</th>
+        <td>{{ todo.name }}</td>
+        <td>{{ todo.description }}</td>
+        <td>{{ todo.targetDate | date }}</td>
+        <td>{{ todo.done? 'Yes' : 'No' }}</td>
+        <td><button (click)="updateTodo(todo.id)" class="btn btn-success">Edit</button></td>
+        <td><button (click)="deleteTodo(todo.id)" class="btn btn-warning">Delete</button></td>  
+      </tr>
+   </tbody>
+</table>

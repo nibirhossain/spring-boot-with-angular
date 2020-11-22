@@ -5,6 +5,7 @@ package com.nibir.hossain.todo.services;
  */
 
 import com.nibir.hossain.todo.repositories.TodoRepository;
+import com.nibir.hossain.todo.web.exceptions.NotFoundException;
 import com.nibir.hossain.todo.web.mappers.TodoMapper;
 import com.nibir.hossain.todo.web.model.TodoDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,6 @@ public class TodoServiceImpl implements TodoService {
     @Autowired
     private TodoMapper todoMapper;
 
-    private static List<TodoDto> todoDtoList = new ArrayList<>();
-    private static long idCounter = 0;
-    static {
-        todoDtoList.add(new TodoDto(++idCounter, "Phone Contract", "Cancellation mobile contract", new Date(), false));
-        todoDtoList.add(new TodoDto(++idCounter, "Rechtschutz", "Cancellation Rechtschutz contract", new Date(), false));
-        todoDtoList.add(new TodoDto(++idCounter, "Hausratversicherung", "Cancellation Hausratversicherung contract", new Date(), false));
-    }
-
     @Override
     public List<TodoDto> findAll() {
         return this.todoRepository.findAll()
@@ -41,17 +34,15 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoDto findById(Long id) {
-        return todoDtoList.stream().filter(todoDto -> todoDto.getId() == id).findFirst().orElse(null);
+        return this.todoRepository.findById(id).map(todoMapper::todo2TodoDto).orElseThrow(NotFoundException::new);
     }
 
     @Override
     public TodoDto updateById(Long id, TodoDto object) {
         if(object.getId() == -1 || object.getId() == 0) {
-            object.setId(++idCounter);
         } else {
             deleteById(object.getId());
         }
-        todoDtoList.add(object);
         return object;
     }
 
@@ -59,11 +50,7 @@ public class TodoServiceImpl implements TodoService {
     public TodoDto deleteById(Long id) {
         TodoDto todoDto = findById(id);
 
-        if(todoDto == null) return null;
-        if(todoDtoList.remove(todoDto)) {
-            return todoDto;
-        }
 
-        return null;
+        return todoDto;
     }
 }

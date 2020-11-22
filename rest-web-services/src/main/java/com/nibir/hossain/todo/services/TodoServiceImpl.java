@@ -52,9 +52,11 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoDto deleteById(Long id) {
-        TodoDto todoDto = findById(id);
+        Todo todo = this.todoRepository.findById(id).orElse(null);
+        if(todo != null) {
+            this.todoRepository.deleteById(id);
+        }
 
-
-        return todoDto;
+        return this.todoMapper.todo2TodoDto(todo);
     }
 }

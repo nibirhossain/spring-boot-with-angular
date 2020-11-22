@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TodoMapper {
     public TodoDto todo2TodoDto(Todo todo) {
+        if(todo == null) return null;
+
         TodoDto todoDto = new TodoDto();
         todoDto.setId(todo.getId());
         todoDto.setName(todo.getName());

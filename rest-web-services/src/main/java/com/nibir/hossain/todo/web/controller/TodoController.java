@@ -20,12 +20,12 @@ public class TodoController {
     private TodoService todoService;
 
     @GetMapping(path = "/todos")
-    public List<TodoDto> listTodos() {
+    public List<TodoDto> findAllTodos() {
         return this.todoService.findAll();
     }
 
     @GetMapping(path = "/todos/{id}")
-    public TodoDto getTodoById(@PathVariable long id) {
+    public TodoDto findTodoById(@PathVariable long id) {
         return this.todoService.findById(id);
     }
 
@@ -35,7 +35,7 @@ public class TodoController {
     }
 
     @DeleteMapping(path = "/todos/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable long id) {
+    public ResponseEntity<Void> deleteTodoById(@PathVariable long id) {
         TodoDto todoDto = this.todoService.deleteById(id);
 
         if(todoDto != null) {

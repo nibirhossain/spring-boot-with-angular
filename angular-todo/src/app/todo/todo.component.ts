@@ -32,19 +32,20 @@ export class TodoComponent implements OnInit {
   }
 
   saveTodo() {
-    if(this.id == -1) { //=== ==
+    if(this.id == 0) { //=== ==
       this.todoService.createTodo(this.todo)
           .subscribe (
-            data => {
-              console.log(data)
-              this.router.navigate(['todos'])
+            response => {
+              console.log(response);
+              console.log("Test");
+              this.router.navigate(['todos']);
             }
           )
     } else {
       this.todoService.updateTodo(this.id, this.todo)
           .subscribe (
-            data => {
-              console.log(data)
+            response => {
+              console.log(response)
               this.router.navigate(['todos'])
             }
           )

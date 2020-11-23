@@ -12,6 +12,13 @@ export class ListTodosComponent implements OnInit {
 
   todos: Todo[];
   message: string;
+  currentTodo: Todo;
+
+  currentIndex = -1;
+  page = 1;
+  count = 0;
+  pageSize = 2;
+  pageSizes = [2, 4, 6];
 
   constructor(
     private todoDataService: TodoDataService,
@@ -23,12 +30,56 @@ export class ListTodosComponent implements OnInit {
   }
 
   refreshTodos(){
-    this.todoDataService.retrieveAllTodos().subscribe(
-      response => {
-        // console.log(response);
-        this.todos = response;
-      }
-    )
+    const params = this.getRequestParams(this.page, this.pageSize);
+
+    this.todoDataService.retrieveAllTodosWithPagination(params)
+      .subscribe(
+        response => {
+          // const { tutorials, totalItems } = response;
+          // this.tutorials = tutorials;
+          // this.count = totalItems;
+          this.count = response.totalElements;
+          this.todos = response.content;
+          console.log(response);
+        },
+        error => {
+          console.log(error);
+        });
+  }
+
+  getRequestParams(page, pageSize) {
+    let params = {};
+
+    if (page) {
+      params[`pageNumber`] = page - 1;
+    }
+
+    if (pageSize) {
+      params[`pageSize`] = pageSize;
+    }
+
+    return params;
+  }
+
+  handlePageChange(event) {
+    this.page = event;
+    this.refreshTodos();
+  }
+
+  handlePageSizeChange(event) {
+    this.pageSize = event.target.value;
+    this.page = 1;
+    this.refreshTodos();
+  }
+
+  setActiveTodo(todo: Todo, index: number) {
+    console.log(todo);
+    this.currentTodo = todo;
+    this.currentIndex = index;
+  }
+
+  addTodo() {
+    this.router.navigate(['todos', 0]);
   }
 
   deleteTodo(id: number) {

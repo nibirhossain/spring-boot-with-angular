@@ -1,3 +1,3 @@
-insert into todo (id, name, description, target_date, is_done) values (1, 'Rechtschutz', 'Rechtschutz cancellation', sysdate(), false);
-insert into todo (id, name, description, target_date, is_done) values (2, 'Handyvertrag', 'Handyvertrag cancellation', sysdate(), false);
-insert into todo (id, name, description, target_date, is_done) values (3, 'Hausratversicherung', 'Hausratversicherung cancellation', sysdate(), false);
+insert into todo (name, description, target_date, is_done) values ('Rechtschutz', 'Rechtschutz cancellation', sysdate(), false);
+insert into todo (name, description, target_date, is_done) values ('Handyvertrag', 'Handyvertrag cancellation', sysdate(), false);
+insert into todo (name, description, target_date, is_done) values ('Hausratversicherung', 'Hausratversicherung cancellation', sysdate(), false);

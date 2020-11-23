@@ -6,7 +6,10 @@ package com.nibir.hossain.todo.web.controller;
 
 import com.nibir.hossain.todo.services.TodoService;
 import com.nibir.hossain.todo.web.model.TodoDto;
+import com.nibir.hossain.todo.web.model.TodoPagedList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +18,33 @@ import java.util.List;
 
 @CrossOrigin(value = "http://localhost:4200")
 @RestController
+@RequestMapping(value = {"/api/v1/"})
 public class TodoController {
+    private static final Integer DEFAULT_PAGE_NUMBER = 0;
+    private static final Integer DEFAULT_PAGE_SIZE = 2;
+
     @Autowired
     private TodoService todoService;
 
-    @GetMapping(path = "/todos")
+    @GetMapping(produces = { "application/json" }, path = "todos")
+    public ResponseEntity<TodoPagedList> findAllTodosWithPagination(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+                                                   @RequestParam(value = "pageSize", required = false) Integer pageSize)
+    {
+        System.out.println("PageNumber " + pageNumber + ", PageSize " + pageSize);
+        if (pageNumber == null || pageNumber < 0){
+            pageNumber = DEFAULT_PAGE_NUMBER;
+        }
+
+        if (pageSize == null || pageSize < 1) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+
+        TodoPagedList todoPagedList = todoService.findAllWithPagination(PageRequest.of(pageNumber, pageSize));
+
+        return new ResponseEntity<>(todoPagedList, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/todos-normal")
     public List<TodoDto> findAllTodos() {
         return this.todoService.findAll();
     }
@@ -27,6 +52,11 @@ public class TodoController {
     @GetMapping(path = "/todos/{id}")
     public TodoDto findTodoById(@PathVariable long id) {
         return this.todoService.findById(id);
+    }
+
+    @PostMapping(path = "/todos")
+    public TodoDto createNewTodo(@RequestBody @Validated TodoDto todoDto) {
+        return this.todoService.save(todoDto);
     }
 
     @PutMapping(path = "/todos/{id}")

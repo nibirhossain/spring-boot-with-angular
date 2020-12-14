@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { from } from 'rxjs';
 import {map} from 'rxjs/operators';
+import { SignupRequest } from '../shared/model/signup-request';
 
 import { LoginRequest } from './../shared/model/login-request';
 import { LoginResponse } from './../shared/model/login-response';
@@ -37,6 +38,19 @@ export class BasicAuthenticationService {
         )
       );
   }
+
+  signup(signupRequest : SignupRequest){
+    return  this.http.post<LoginResponse>(`${API_BASE_URL}/auth/signup`, signupRequest)
+    .pipe(
+      map(
+        data => {
+          console.log("Signup data", data);
+          return data;
+        }
+      )
+    );
+  }
+
   login(loginRequest : LoginRequest){
     return  this.http.post<LoginResponse>(`${API_BASE_URL}/auth/login`, loginRequest)
     .pipe(

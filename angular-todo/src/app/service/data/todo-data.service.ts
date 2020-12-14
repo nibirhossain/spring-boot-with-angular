@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Todo } from '../../shared/model/todo'
 import { TodoPagedList} from '../../shared/model/todo-paged-list'
 import { Observable } from 'rxjs';
@@ -18,7 +18,7 @@ export class TodoDataService {
 
   retrieveAllTodosWithPagination(params: any) {
     console.log("Retrieve all todos with pagination!!!");
-    return this.http.get<TodoPagedList>(`${API_BASE_URL}/todos`, {params});
+    return this.http.get<TodoPagedList>(`${API_BASE_URL}/todos`, {params: params});
   }  
 
   retrieveAllTodos() {
